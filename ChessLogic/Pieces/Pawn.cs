@@ -28,7 +28,7 @@ namespace ChessLogic
         public override Piece Copy()
         {
             Pawn copy = new Pawn(Color);
-            Copy().HasMoved = HasMoved;
+            copy.HasMoved = HasMoved;
             return copy;
         }
 
@@ -80,6 +80,15 @@ namespace ChessLogic
         public override IEnumerable<Move> GetMoves(Position from, Board board)
         {
             return ForwardMoves(from, board).Concat(DiagonalMoves(from, board));
+        }
+
+        public override bool CanCaptureOpponentKing(Position from, Board board)
+        {
+            return DiagonalMoves(from, board).Any(move =>
+            {
+                Piece piece = board[move.ToPos];
+                return piece != null && piece.Type == PieceType.King;
+            });
         }
     }
 }

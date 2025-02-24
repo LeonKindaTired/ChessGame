@@ -38,8 +38,23 @@ namespace ChessLogic
 
         protected IEnumerable<Position> MovePositionsInDirs(Position from, Board board, Direction[] dirs)
         {
-            return dirs.SelectMany(dir => MovePositionsInDir(from, board, dir));
+            foreach (var dir in dirs)
+            {
+                foreach (var pos in MovePositionsInDir(from, board, dir))
+                {
+                    yield return pos;
+                }
+            }
+        }
 
+
+        public virtual bool CanCaptureOpponentKing(Position from, Board board)
+        {
+            return GetMoves(from, board).Any(move =>
+            {
+                Piece piece = board[move.ToPos];
+                return piece != null && piece.Type == PieceType.King;
+            });
         }
     }
 }

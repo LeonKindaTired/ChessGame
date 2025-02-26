@@ -21,10 +21,12 @@ namespace ChessLogic.Moves
             capturePos = new Position(from.Row, to.Column);
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             new NormalMove(FromPos, ToPos).Execute(board);
             board[capturePos] = null;
+
+            return true;
         }
     }
 }
